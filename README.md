@@ -1,7 +1,7 @@
 # rosqueuejs
-===========
-
+=======
 Client Side Queuing Via the ROS Queue Node
+
 This project is released as part of the [Robot Web Tools](http://robotwebtools.org/) effort.
 
 ### Dependencies
