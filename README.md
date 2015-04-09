@@ -1,20 +1,8 @@
 # rosqueuejs
-Client Side Queuing Via the ROS Queue Node
-
-rosqueuejs [![Build Status](https://api.travis-ci.org/RobotWebTools/starter-template.png)](https://travis-ci.org/RobotWebTools/starter-template)
 ===========
 
-#### A Blank Project with Template JavaScript and Build Files
-For full documentation, see [the ROS wiki](http://www.ros.org/wiki/JavaScriptStyleGuide) or check out some [working demos](http://robotwebtools.org/).
-
-[JSDoc](http://robotwebtools.org/jsdoc/rosqueuejs/current/) can be found on the Robot Web Tools website.
-
+Client Side Queuing Via the ROS Queue Node
 This project is released as part of the [Robot Web Tools](http://robotwebtools.org/) effort.
-
-### Usage
-Pre-built files can be found in either [rosqueue.js](build/myproject.js) or [myproject.min.js](build/myproject.min.js).
-
-Alternatively, you can use the current release via the CDN: ([full](http://cdn.example.com/rosqueuejs/current/myproject.js)) | ([min](http://cdn.example.com/myprojectjs/current/myproject.min.js))
 
 ### Dependencies
 rosqueuejs depends on:
