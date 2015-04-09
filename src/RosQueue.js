@@ -18,11 +18,10 @@ var ROSQUEUE = ROSQUEUE || {
  *      * userId - the id of the user, used to distinguish users
  */
 ROSQUEUE.RosQueue = function RosQueue(options){
-	console.log(options);
 	options = options || {};
 	this.ros = options.ros;
 	this.userId = options.userId;
-
+	console.log(options);
 	this.dequeuePub = new ROSLIB.Topic({
 		ros: this.ros,
 		name: 'rms_dequeue',
@@ -48,48 +47,7 @@ ROSQUEUE.RosQueue = function RosQueue(options){
 		name: 'rms_pop_front',
 		messageType: 'std_msgs/Int32'
 	});
-
-
-	/**
-	 * When I recieve a queue update, unform my onQueueUpdate function
-	 * check if i'm active, and getting wait time and queue position
-	 * @param message RMSQueue message, a list of UserStatus message, which have a user_id and wait_time property
-	 */
-	this.queueSub.subscribe = function (message) {
-		console.log('RMSQueue' + message);
-		var data = {}; //holds data about my place in the queue
-
-		var i = message.queue.length;
-		while (i--) {
-			if (this.userId === message.queue[i].user_id) {
-				data.position = i;
-				if (i === 0) {
-					data.active = true;
-				}
-				else {
-					data.active = false;
-					data.wait = message.queue[i].wait_time.secs;
-				}
-			}
-		}
-
-		this.onQueueUpdate(data);
-	};
-
-
-	/**
-	 * if I receive a pop_front message with my id, deqeue
-	 * @param message Int32 message, the id of the user to remove
-	 */
-	this.popFrontSub.subscribe = function (message) {
-		var popUserId = message.data;
-		if (this.userId === popUserId) {
-			this.dequeue();
-		}
-	};
 };
-
-
 
 /**
  * publishes my id when I want to add myself
@@ -105,12 +63,4 @@ ROSQUEUE.RosQueue.prototype.enqueue = function () {
 ROSQUEUE.RosQueue.prototype.dequeue = function () {
 	console.log('dequeue');
 	this.dequeuePub.publish(new ROSLIB.Message({data: this.userId}));
-};
-
-ROSQUEUE.RosQueue.prototype.onTimeout = function() {
-	console.log('onTimeout');
-};
-
-ROSQUEUE.RosQueue.prototype.onQueueUpdate = function() {
-	console.log('queue update');
 };
