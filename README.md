@@ -1,3 +1,6 @@
+# rosqueuejs
+Client Side Queuing Via the ROS Queue Node
+
 rosqueuejs [![Build Status](https://api.travis-ci.org/RobotWebTools/starter-template.png)](https://travis-ci.org/RobotWebTools/starter-template)
 ===========
 
