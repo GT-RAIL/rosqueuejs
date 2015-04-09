@@ -19,9 +19,14 @@ var ROSQUEUE = ROSQUEUE || {
  */
 ROSQUEUE.RosQueue = function RosQueue(options){
 	options = options || {};
+	
+	/** roslib object used by all the publishers and subscribers*/
 	this.ros = options.ros;
+
+	/** user Id, which is used to uniquely identify all users*/
 	this.userId = options.userId;
-	console.log(options);
+
+	/** the publisher for dequeing */
 	this.dequeuePub = new ROSLIB.Topic({
 		ros: this.ros,
 		name: 'rms_dequeue',
@@ -29,6 +34,7 @@ ROSQUEUE.RosQueue = function RosQueue(options){
 	});
 	this.dequeuePub.advertise();
 
+	/** the publisher for enqueing */
 	this.enqueuePub = new ROSLIB.Topic({
 		ros: this.ros,
 		name: 'rms_enqueue',
@@ -36,12 +42,14 @@ ROSQUEUE.RosQueue = function RosQueue(options){
 	});
 	this.enqueuePub.advertise();
 
+	/** the subscriber for the queue published by the rms_queue_manager*/
 	this.queueSub = new ROSLIB.Topic({
 		ros: this.ros,
 		name: 'rms_queue',
 		messageType: 'rms_queue_manager/RMSQueue'
 	});
 
+	/** the subscriber for the popFront (remove first user) published by the rms_queue_manager*/
 	this.popFrontSub = new ROSLIB.Topic({
 		ros: this.ros,
 		name: 'rms_pop_front',
@@ -53,7 +61,6 @@ ROSQUEUE.RosQueue = function RosQueue(options){
  * publishes my id when I want to add myself
  */
 ROSQUEUE.RosQueue.prototype.enqueue = function () {
-	console.log('enqueue');
 	this.enqueuePub.publish(new ROSLIB.Message({data: this.userId}));
 };
 
@@ -61,6 +68,5 @@ ROSQUEUE.RosQueue.prototype.enqueue = function () {
  * publishes my id when I want to remove myself
  */
 ROSQUEUE.RosQueue.prototype.dequeue = function () {
-	console.log('dequeue');
 	this.dequeuePub.publish(new ROSLIB.Message({data: this.userId}));
 };
