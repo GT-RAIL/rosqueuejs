@@ -19,6 +19,10 @@ ROSQUEUE.Queue = function(options){
 	/** roslib object used by all the publishers and subscribers*/
 	this.ros = options.ros;
 
+	
+	/** time in minutes that the study is conducted for*/
+	this.studyTime = options.studyTime;
+
 	/** user Id, which is used to uniquely identify all users*/
 	this.userId = options.userId;
 
@@ -51,7 +55,7 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 	var request = new ROSLIB.ServiceRequest({
 		user_id : this.userId,
 		enqueue : true,
-		study_time : 0
+		study_time : this.studyTime
 	});
 	var that = this;
 	this.updateQueueClient.callService(request,function(result){
