@@ -55,7 +55,7 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 	var request = new ROSLIB.ServiceRequest({
 		user_id : this.userId,
 		enqueue : true,
-		study_time : this.studyTime
+		study_time : this.studyTime * 60 //the rms_queue_manager node needs seconds
 	});
 	var that = this;
 	this.updateQueueClient.callService(request,function(result){
