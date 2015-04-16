@@ -26,6 +26,8 @@ ROSQUEUE.Queue = function(options){
 	/** user Id, which is used to uniquely identify all users*/
 	this.userId = options.userId;
 
+	var that = this;
+
 	/** the publisher for dequeing */
 	this.updateQueueClient = new ROSLIB.Service({
 		ros: this.ros,
@@ -46,19 +48,52 @@ ROSQUEUE.Queue = function(options){
 		name: '/rms_pop_front',
 		messageType: 'std_msgs/Int32'
 	});
+
+	/**
+	 * extracts user information and emits queue_sub event to allow interface to update
+	 */
+	this.queueSub.subscribe(function(message) {
+		var i = message.queue.length;
+		var data = {min:0,sec:0,active:false};
+
+		while (i--) {
+			if (that.userId === message.queue[i]['user_id']) {
+				data.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
+				data.sec = message.queue[i]['wait_time'].secs % 60;
+				if (data.min === 0 && data.sec === 0){
+					data.active = true;
+				}
+				that.emit('queue_sub',data);
+			}
+		}
+	});
+
+	/**
+	 * extracts user information and emits pop_front_sub event to allow interface to update
+	 */
+	this.popFrontSub.subscribe(function(message) {
+		console.log(message);
+		if (that.userId === message.data) {
+			that.dequeue();
+			that.emit('pop_front_sub');
+		}
+	});
 };
 
 /**
  * publishes my id when I want to add myself
  */
 ROSQUEUE.Queue.prototype.enqueue = function () {
+	var studyTime = this.studyTime * 60;
 	var request = new ROSLIB.ServiceRequest({
 		user_id : this.userId,
 		enqueue : true,
-		study_time : this.studyTime * 60 //the rms_queue_manager node needs seconds
+		study_time : studyTime //the rms_queue_manager node needs seconds
 	});
 	var that = this;
+	console.log(request);
 	this.updateQueueClient.callService(request,function(result){
+		console.log('enqueue result...');
 		that.emit('enqueue');
 	});
 };
