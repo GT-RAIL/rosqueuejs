@@ -41,43 +41,6 @@ ROSQUEUE.Queue = function(options){
 		name: '/rms_queue',
 		messageType: 'rms_queue_manager/RMSQueue'
 	});
-
-	/** the subscriber for the popFront (remove first user) published by the rms_queue_manager*/
-	this.popFrontSub = new ROSLIB.Topic({
-		ros: this.ros,
-		name: '/rms_pop_front',
-		messageType: 'std_msgs/Int32'
-	});
-
-	/**
-	 * extracts user information and emits queue_sub event to allow interface to update
-	 */
-	this.queueSub.subscribe(function(message) {
-		var i = message.queue.length;
-		var data = {min:0,sec:0,active:false};
-
-		while (i--) {
-			if (that.userId === message.queue[i]['user_id']) {
-				data.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
-				data.sec = message.queue[i]['wait_time'].secs % 60;
-				if (data.min === 0 && data.sec === 0){
-					data.active = true;
-				}
-				that.emit('queue_sub',data);
-			}
-		}
-	});
-
-	/**
-	 * extracts user information and emits pop_front_sub event to allow interface to update
-	 */
-	this.popFrontSub.subscribe(function(message) {
-		console.log(message);
-		if (that.userId === message.data) {
-			that.dequeue();
-			that.emit('pop_front_sub');
-		}
-	});
 };
 
 /**
@@ -91,9 +54,37 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 		study_time : studyTime //the rms_queue_manager node needs seconds
 	});
 	var that = this;
-	console.log(request);
 	this.updateQueueClient.callService(request,function(result){
-		console.log('enqueue result...');
+		/**
+		 * extracts user time left for a user and emits it to the interface so it can update
+		 */
+		that.queueSub.subscribe(function(message) {
+			var i = message.queue.length;
+			var data = {min:0,sec:0,active:false};
+
+			while (i--) {
+				if (that.userId === message.queue[i]['user_id']) {
+					data.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
+					data.sec = message.queue[i]['wait_time'].secs % 60;
+
+					//wait time for active user is (-1,-1)
+					if (data.min === -1 && data.sec === -1){
+						that.emit('enabled');
+					}
+					//all other wait times are for users in queue
+					else if (data.min >= 0 && data.sec >= 0){
+						that.emit('wait_time',data);
+						that.emit('disabled');
+					}
+					return;
+				}
+			}
+
+			//set interface to disabled/dequeued if you're not in the queue
+			that.emit('disabled');
+			that.emit('dequeue');
+
+		});
 		that.emit('enqueue');
 	});
 };
