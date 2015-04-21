@@ -1,7 +1,7 @@
 Original Authors
 ----------------
 
- * [First Author](https://petermitrano.github.io) (pdmitrano@wpi.edu)
+ * [Peter Mitrano](https://petermitrano.github.io) (pdmitrano@wpi.edu)
 
 Contributors
 ------------

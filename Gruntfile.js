@@ -4,8 +4,8 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     concat: {
       build: {
-        src  : ['../src/*.js', '../src/**/*.js'],
-        dest : '../build/rosqueue.js'
+        src  : ['src/*.js', 'src/**/*.js'],
+        dest : 'build/rosqueue.js'
       }
     },
     jshint: {
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
       },
       files: [
         'Gruntfile.js',
-        '../build/rosqueue.js'
+        'build/rosqueue.js'
       ]
     },
     uglify: {
@@ -22,8 +22,8 @@ module.exports = function(grunt) {
         report: 'min'
       },
       build: {
-        src: '../build/rosqueue.js',
-        dest: '../build/rosqueue.min.js'
+        src: 'build/rosqueue.js',
+        dest: 'build/rosqueue.min.js'
       }
     },
     watch: {
@@ -32,8 +32,8 @@ module.exports = function(grunt) {
           interrupt: true
         },
         files: [
-          '../src/*.js',
-          '../src/**/*.js'
+          'src/*.js',
+          'src/**/*.js'
         ],
         tasks: ['concat']
       },
@@ -44,8 +44,8 @@ module.exports = function(grunt) {
         files: [
           'Gruntfile.js',
           '.jshintrc',
-          '../src/*.js',
-          '../src/**/*.js'
+          'src/*.js',
+          'src/**/*.js'
         ],
         tasks: ['build']
       }
@@ -54,16 +54,16 @@ module.exports = function(grunt) {
       options: {
         force: true
       },
-      doc: ['../doc']
+      doc: ['doc']
     },
     jsdoc: {
       doc: {
         src: [
-          '../src/*.js',
-          '../src/**/*.js'
+          'src/*.js',
+          'src/**/*.js'
         ],
         options: {
-          destination: '../doc'
+          destination: 'doc'
         }
       }
     }
