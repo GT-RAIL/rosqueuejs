@@ -21,94 +21,94 @@ var ROSQUEUE = ROSQUEUE || {
  *      * userId - the id of the user, used to distinguish users
  */
 ROSQUEUE.Queue = function(options){
-	options = options || {};
-	
-	/** roslib object used by all the publishers and subscribers*/
-	this.ros = options.ros;
+  options = options || {};
+  
+  /** roslib object used by all the publishers and subscribers*/
+  this.ros = options.ros;
 
-	
-	/** time in minutes that the study is conducted for*/
-	this.studyTime = options.studyTime;
+  
+  /** time in minutes that the study is conducted for*/
+  this.studyTime = options.studyTime;
 
-	/** user Id, which is used to uniquely identify all users*/
-	this.userId = options.userId;
+  /** user Id, which is used to uniquely identify all users*/
+  this.userId = options.userId;
 
-	var that = this;
+  var that = this;
 
-	/** the publisher for dequeing */
-	this.updateQueueClient = new ROSLIB.Service({
-		ros: this.ros,
-		name: '/update_queue',
-		serviceType: 'rms_queue_manager/UpdateQueue'
-	});
+  /** the publisher for dequeing */
+  this.updateQueueClient = new ROSLIB.Service({
+    ros: this.ros,
+    name: '/update_queue',
+    serviceType: 'rms_queue_manager/UpdateQueue'
+  });
 
-	/** the subscriber for the queue published by the rms_queue_manager*/
-	this.queueSub = new ROSLIB.Topic({
-		ros: this.ros,
-		name: '/rms_queue',
-		messageType: 'rms_queue_manager/RMSQueue'
-	});
+  /** the subscriber for the queue published by the rms_queue_manager*/
+  this.queueSub = new ROSLIB.Topic({
+    ros: this.ros,
+    name: '/rms_queue',
+    messageType: 'rms_queue_manager/RMSQueue'
+  });
 };
 
 /**
  * publishes my id when I want to add myself
  */
 ROSQUEUE.Queue.prototype.enqueue = function () {
-	var studyTime = this.studyTime * 60;
-	var request = new ROSLIB.ServiceRequest({
-		user_id : this.userId,
-		enqueue : true,
-		study_time : studyTime //the rms_queue_manager node needs seconds
-	});
-	var that = this;
-	this.updateQueueClient.callService(request,function(result){
-		/**
-		 * extracts user time left for a user and emits it to the interface so it can update
-		 */
-		that.queueSub.subscribe(function(message) {
-			var i = message.queue.length;
-			var data = {min:0,sec:0,active:false};
+  var studyTime = this.studyTime * 60;
+  var request = new ROSLIB.ServiceRequest({
+    user_id : this.userId,
+    enqueue : true,
+    study_time : studyTime //the rms_queue_manager node needs seconds
+  });
+  var that = this;
+  this.updateQueueClient.callService(request,function(result){
+    /**
+     * extracts user time left for a user and emits it to the interface so it can update
+     */
+    that.queueSub.subscribe(function(message) {
+      var i = message.queue.length;
+      var data = {min:0,sec:0,active:false};
 
-			while (i--) {
-				if (that.userId === message.queue[i]['user_id']) {
-					data.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
-					data.sec = message.queue[i]['wait_time'].secs % 60;
+      while (i--) {
+        if (that.userId === message.queue[i]['user_id']) {
+          data.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
+          data.sec = message.queue[i]['wait_time'].secs % 60;
 
-					//wait time for active user is (-1,-1)
-					if (data.min === -1 && data.sec === -1){
-						that.emit('enabled');
-					}
-					//all other wait times are for users in queue
-					else if (data.min >= 0 && data.sec >= 0){
-						that.emit('wait_time',data);
-						that.emit('disabled');
-					}
-					return;
-				}
-			}
+          //wait time for active user is (-1,-1)
+          if (data.min === -1 && data.sec === -1){
+            that.emit('enabled');
+          }
+          //all other wait times are for users in queue
+          else if (data.min >= 0 && data.sec >= 0){
+            that.emit('wait_time',data);
+            that.emit('disabled');
+          }
+          return;
+        }
+      }
 
-			//set interface to disabled/dequeued if you're not in the queue
-			that.emit('disabled');
-			that.emit('dequeue');
+      //set interface to disabled/dequeued if you're not in the queue
+      that.emit('disabled');
+      that.emit('dequeue');
 
-		});
-		that.emit('enqueue');
-	});
+    });
+    that.emit('enqueue');
+  });
 };
 
 /**
  * publishes my id when I want to remove myself
  */
 ROSQUEUE.Queue.prototype.dequeue = function () {
-	var request = new ROSLIB.ServiceRequest({
-		user_id : this.userId,
-		enqueue : false,
-		study_time : 0
-	});
-	var that = this;
-	this.updateQueueClient.callService(request,function(result){
-		that.emit('dequeue');
-	});
+  var request = new ROSLIB.ServiceRequest({
+    user_id : this.userId,
+    enqueue : false,
+    study_time : 0
+  });
+  var that = this;
+  this.updateQueueClient.callService(request, function(result) {
+    that.emit('dequeue');
+  });
 };
 
 ROSQUEUE.Queue.prototype.__proto__ = EventEmitter2.prototype;
