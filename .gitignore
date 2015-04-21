@@ -1,0 +1,6 @@
+.idea
+.project
+.settings
+.vagrant
+node_modules
+doc
