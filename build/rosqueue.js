@@ -26,6 +26,8 @@ ROSQUEUE.Queue = function(options){
 	/** roslib object used by all the publishers and subscribers*/
 	this.ros = options.ros;
 
+	/** variable to ensure enabled is only emit once*/
+	this.sent_enabled = false;
 	
 	/** time in minutes that the study is conducted for*/
 	this.studyTime = options.studyTime;
@@ -77,6 +79,10 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 					//wait time for active user is (-1,-1)
 					if (data.min === -1 && data.sec === -1){
 						that.emit('enabled');
+						if (!that.sent_enabled){
+							that.emit('first_enabled');
+						}
+						that.sent_enabled = true;
 					}
 					//all other wait times are for users in queue
 					else if (data.min >= 0 && data.sec >= 0){
