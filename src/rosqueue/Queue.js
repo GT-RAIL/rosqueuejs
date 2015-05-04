@@ -62,24 +62,27 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 		 */
 		that.queueSub.subscribe(function(message) {
 			var i = message.queue.length;
-			var data = {min:0,sec:0,active:false};
+			var time = {min:0,sec:0,active:false};
 
 			while (i--) {
 				if (that.userId === message.queue[i]['user_id']) {
-					data.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
-					data.sec = message.queue[i]['wait_time'].secs % 60;
 
-					//wait time for active user is (-1,-1)
-					if (data.min === -1 && data.sec === -1){
-						that.emit('enabled');
+					//check if first/active user
+					if (i === message.queue.length){
+						time.min =  Math.floor(message.queue[i]['time_left'].secs / 60);
+						time.sec = message.queue[i]['time_left'].secs % 60;
+						that.emit('enabled',time);
 						if (!that.sent_enabled){
 							that.emit('first_enabled');
 						}
 						that.sent_enabled = true;
 					}
+					
 					//all other wait times are for users in queue
-					else if (data.min >= 0 && data.sec >= 0){
-						that.emit('wait_time',data);
+					else if (time.min >= 0 && time.sec >= 0){
+						time.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
+						time.sec = message.queue[i]['wait_time'].secs % 60;
+						that.emit('time',time);
 						that.emit('disabled');
 					}
 					return;
