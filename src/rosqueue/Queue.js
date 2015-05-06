@@ -67,13 +67,13 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 				if (that.userId === message.queue[i]['user_id']) {
 
 					//check if first/active user
-					if (i === message.queue.length-1){
+					if (i === 0){
 						time.min =  Math.floor(message.queue[i]['time_left'].secs / 60);
 						time.sec = message.queue[i]['time_left'].secs % 60;
-						that.emit('enabled',time);
 						if (!that.sent_enabled){
 							that.emit('first_enabled');
 						}
+						that.emit('enabled',time);
 						that.sent_enabled = true;
 					}
 					
@@ -81,6 +81,7 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 					else {
 						time.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
 						time.sec = message.queue[i]['wait_time'].secs % 60;
+						console.log(message.queue[i]['wait_time']);
 						that.emit('wait_time',time);
 						that.emit('disabled');
 					}
