@@ -63,7 +63,6 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 		that.queueSub.subscribe(function(message) {
 			var i = message.queue.length;
 			var time = {min:0,sec:0};
-
 			while (i--) {
 				if (that.userId === message.queue[i]['user_id']) {
 
@@ -82,7 +81,7 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 					else {
 						time.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
 						time.sec = message.queue[i]['wait_time'].secs % 60;
-						that.emit('time',time);
+						that.emit('wait_time',time);
 						that.emit('disabled');
 					}
 					return;
