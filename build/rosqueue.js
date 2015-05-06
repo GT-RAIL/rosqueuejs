@@ -74,9 +74,11 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 				if (that.userId === message.queue[i]['user_id']) {
 
 					//check if first/active user
+					console.log(message.queue[i].wait_time);
+					console.log(message.queue[i].time_left);
 					if (i === 0){
-						time.min =  Math.floor(message.queue[i]['time_left'].secs / 60);
-						time.sec = message.queue[i]['time_left'].secs % 60;
+						time.min =  Math.floor(message.queue[i].time_left.secs / 60);
+						time.sec = message.queue[i].time_left.secs % 60;
 						if (!that.sent_enabled){
 							that.emit('first_enabled');
 						}
@@ -86,9 +88,8 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
 					
 					//all other wait times are for users in queue
 					else {
-						time.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
-						time.sec = message.queue[i]['wait_time'].secs % 60;
-						console.log(message.queue[i]['wait_time']);
+						time.min =  Math.floor(message.queue[i].wait_time.secs / 60);
+						time.sec = message.queue[i].wait_time.secs % 60;
 						that.emit('wait_time',time);
 						that.emit('disabled');
 					}
