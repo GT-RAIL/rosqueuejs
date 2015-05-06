@@ -70,8 +70,8 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
     that.queueSub.subscribe(function(message) {
       var i = message.queue.length;
       var time = {min:0,sec:0};
-      while (i--) {
-        if (that.userId === message.queue[i]['user_id']) {
+      for (i = message.queue.length; i>=0; i--){
+        if (that.userId === message.queue[i].user_id) {
           //check if first/active user
           console.log(message.queue[i].wait_time);
           console.log(message.queue[i].time_left);
@@ -92,7 +92,9 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
             that.emit('wait_time',time);
             that.emit('disabled');
           }
-        return;
+
+          //once the current user is found in the queue, exit the function
+          return;
         }
       }
       //set interface to disabled/dequeued if you're not in the queue
