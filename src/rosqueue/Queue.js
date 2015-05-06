@@ -61,9 +61,8 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
      * extracts user time left for a user and emits it to the interface so it can update
      */
     that.queueSub.subscribe(function(message) {
-      var i;
       var time = {min:0,sec:0};
-      for (i = message.queue.length; i>=0; i--){
+      for (var i = message.queue.length - 1; i>=0; i--){
         if (that.userId === message.queue[i].user_id) {
           //check if first/active user
           if (i === 0){
