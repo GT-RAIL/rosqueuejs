@@ -1,3 +1,2 @@
-2013-01-01 - **0.0.1**
- * Initial development of MYPROJECT [(fauthor)](https://github.com/fauthor/)
-
+2015-04-21 - **0.0.1**
+ * Initial development of ROSQUEUEJS [(PeterMitrano)](https://github.com/PeterMitrano/)
