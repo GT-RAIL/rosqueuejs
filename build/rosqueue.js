@@ -26,9 +26,11 @@ ROSQUEUE.Queue = function(options){
   /** roslib object used by all the publishers and subscribers*/
   this.ros = options.ros;
 
-  
-  /** time in minutes that the study is conducted for*/
-  this.studyTime = options.studyTime;
+	/** variable to ensure enabled is only emit once*/
+	this.sent_enabled = false;
+	
+	/** time in minutes that the study is conducted for*/
+	this.studyTime = options.studyTime;
 
   /** user Id, which is used to uniquely identify all users*/
   this.userId = options.userId;
@@ -67,30 +69,38 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
      */
     that.queueSub.subscribe(function(message) {
       var i = message.queue.length;
-      var data = {min:0,sec:0,active:false};
-
-      while (i--) {
-        if (that.userId === message.queue[i]['user_id']) {
-          data.min =  Math.floor(message.queue[i]['wait_time'].secs / 60);
-          data.sec = message.queue[i]['wait_time'].secs % 60;
-
-          //wait time for active user is (-1,-1)
-          if (data.min === -1 && data.sec === -1){
-            that.emit('enabled');
+      var time = {min:0,sec:0};
+      for (i = message.queue.length; i>=0; i--){
+        if (that.userId === message.queue[i].user_id) {
+          //check if first/active user
+          console.log(message.queue[i].wait_time);
+          console.log(message.queue[i].time_left);
+          if (i === 0){
+            time.min =  Math.floor(message.queue[i].time_left.secs / 60);
+            time.sec = message.queue[i].time_left.secs % 60;
+            if (!that.sent_enabled){
+              that.emit('first_enabled');
+            }
+            that.emit('enabled',time);
+            that.sent_enabled = true;
           }
+  
           //all other wait times are for users in queue
-          else if (data.min >= 0 && data.sec >= 0){
-            that.emit('wait_time',data);
+          else {
+            time.min =  Math.floor(message.queue[i].wait_time.secs / 60);
+            time.sec = message.queue[i].wait_time.secs % 60;
+            that.emit('wait_time',time);
             that.emit('disabled');
           }
+
+          //once the current user is found in the queue, exit the function
           return;
         }
       }
-
       //set interface to disabled/dequeued if you're not in the queue
       that.emit('disabled');
       that.emit('dequeue');
-
+  
     });
     that.emit('enqueue');
   });
