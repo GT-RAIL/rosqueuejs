@@ -3,14 +3,14 @@
  */
 
 var ROSQUEUE = ROSQUEUE || {
-  REVISION : '0.0.4-SNAPSHOT'
+  REVISION : '0.0.4'
 };
 /**
  * @author Peter Mitrano - pdmitrano@wpi.edu
  */
 
 /**
- * Communicates with rqueue_manager node to handle users.
+ * Communicates with rail_user_queue_manager node to handle users.
  * Developed to allow multiple users to visit an interface to control a single robot
  * Users will be placed into a queue giving the first user control of the robot for a certain amount of time
  * When that user leaves, or their time ends, they will be kicked out and the next user gains control
@@ -37,15 +37,15 @@ ROSQUEUE.Queue = function(options) {
   // the publisher for dequeing
   this.updateQueueClient = new ROSLIB.Service({
     ros: this.ros,
-    name: '/queue_manager/update_queue',
-    serviceType: 'queue_manager/UpdateQueue'
+    name: '/rail_user_queue_manager/update_queue',
+    serviceType: 'rail_user_queue_manager/UpdateQueue'
   });
 
-  // the subscriber for the queue published by the queue_manager
+  // the subscriber for the queue published by the rail_user_queue_manager
   this.queueSub = new ROSLIB.Topic({
     ros: this.ros,
-    name: '/queue_manager/queue',
-    messageType: 'queue_manager/Queue'
+    name: '/rail_user_queue_manager/queue',
+    messageType: 'rail_user_queue_manager/Queue'
   });
 };
 
@@ -56,7 +56,7 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
   var request = new ROSLIB.ServiceRequest({
     user_id : this.userId,
     enqueue : true,
-    study_time : this.studyTime * 60 //the queue_manager node needs seconds
+    study_time : this.studyTime * 60 //the rail_user_queue_manager node needs seconds
   });
   var that = this;
   // make the request
