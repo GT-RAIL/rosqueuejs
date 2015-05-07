@@ -1,5 +1,5 @@
 rosqueuejs [![Build Status](https://api.travis-ci.org/WPI-RAIL/rosqueuejs.png)](https://travis-ci.org/WPI-RAIL/rosqueuejs)
-=======
+==========
 
 Client Side Queuing Via the ROS Queue Node
 
