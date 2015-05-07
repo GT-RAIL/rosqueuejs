@@ -3,5 +3,5 @@
  */
 
 var ROSQUEUE = ROSQUEUE || {
-  REVISION : '0.0.3'
+  REVISION : '0.0.4'
 };

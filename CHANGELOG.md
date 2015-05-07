@@ -1,3 +1,6 @@
+2015-05-07 - **0.0.4**
+ * Moved to "less generic" node name [(rctoris)](https://github.com/rctoris/)
+ 
 2015-05-07 - **0.0.3**
  * Fixed bug in message name [(rctoris)](https://github.com/rctoris/)
  
