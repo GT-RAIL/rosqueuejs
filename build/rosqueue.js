@@ -3,7 +3,7 @@
  */
 
 var ROSQUEUE = ROSQUEUE || {
-  REVISION : '0.0.2'
+  REVISION : '0.0.3-SNAPSHOT'
 };
 /**
  * @author Peter Mitrano - pdmitrano@wpi.edu
