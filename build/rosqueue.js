@@ -10,8 +10,8 @@ var ROSQUEUE = ROSQUEUE || {
  */
 
 /**
- * Communicates with rms_queue_manager node to handle users.
- * Developed to allow multiple users to visit an RMS interface to control a single robot
+ * Communicates with rqueue_manager node to handle users.
+ * Developed to allow multiple users to visit an interface to control a single robot
  * Users will be placed into a queue giving the first user control of the robot for a certain amount of time
  * When that user leaves, or their time ends, they will be kicked out and the next user gains control
  *
@@ -41,11 +41,11 @@ ROSQUEUE.Queue = function(options) {
     serviceType: 'queue_manager/UpdateQueue'
   });
 
-  // the subscriber for the queue published by the rms_queue_manager
+  // the subscriber for the queue published by the queue_manager
   this.queueSub = new ROSLIB.Topic({
     ros: this.ros,
     name: '/queue_manager/queue',
-    messageType: 'queue_manager/RMSQueue'
+    messageType: 'queue_manager/Queue'
   });
 };
 
@@ -56,7 +56,7 @@ ROSQUEUE.Queue.prototype.enqueue = function () {
   var request = new ROSLIB.ServiceRequest({
     user_id : this.userId,
     enqueue : true,
-    study_time : this.studyTime * 60 //the rms_queue_manager node needs seconds
+    study_time : this.studyTime * 60 //the queue_manager node needs seconds
   });
   var that = this;
   // make the request
