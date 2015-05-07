@@ -99,7 +99,8 @@ When that user leaves, or their time ends, they will be kicked out and the next 
             
             <td class="description last">object with the following keys
      * ros - the ros ROSLIB.Ros connection handle
-     * userId - the id of the user, used to distinguish users</td>
+     * userId - the ID of the user, used to distinguish users
+     * studyTime - time in minutes that the study is conducted for</td>
         </tr>
 	
 	
@@ -130,7 +131,7 @@ When that user leaves, or their time ends, they will be kicked out and the next 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 16
+        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 17
     </li></ul></dd>
     
     
@@ -164,270 +165,6 @@ When that user leaves, or their time ends, they will be kicked out and the next 
     
     
     
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="queueSub"><span class="type-signature"></span>queueSub<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        the subscriber for the queue published by the rms_queue_manager
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 39
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="ros"><span class="type-signature"></span>ros<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        roslib object used by all the publishers and subscribers
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 20
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="studyTime"><span class="type-signature"></span>studyTime<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        time in minutes that the study is conducted for
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 24
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="updateQueueClient"><span class="type-signature"></span>updateQueueClient<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        the publisher for dequeing
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 32
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="userId"><span class="type-signature"></span>userId<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        user Id, which is used to uniquely identify all users
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 27
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
     
     
     
@@ -444,7 +181,7 @@ When that user leaves, or their time ends, they will be kicked out and the next 
     
     
     <div class="description">
-        publishes my id when I want to remove myself
+        Remove the user from the queue.
     </div>
     
 
@@ -509,7 +246,7 @@ When that user leaves, or their time ends, they will be kicked out and the next 
     
     
     <div class="description">
-        publishes my id when I want to add myself
+        Publishes the user ID and adds the user to the queue.
     </div>
     
 
@@ -542,7 +279,7 @@ When that user leaves, or their time ends, they will be kicked out and the next 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 49
+        <a href="Queue.js.html">rosqueue/Queue.js</a>, line 48
     </li></ul></dd>
     
     
@@ -585,7 +322,7 @@ When that user leaves, or their time ends, they will be kicked out and the next 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Tue Apr 21 2015 13:50:11 GMT-0400 (EDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu May 07 2015 08:34:00 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
