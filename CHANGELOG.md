@@ -1,4 +1,4 @@
-2015-04-21 - **0.0.2**
+2015-05-07 - **0.0.2**
  * Added wait times and new events [(PeterMitrano)](https://github.com/PeterMitrano/)
  * Minor cleanup [(rctoris)](https://github.com/rctoris/)
 
